@@ -9,6 +9,13 @@ const normalizeVoiceItems = (payload) => {
     return Array.isArray(payload) ? payload : []
 }
 
+const formatDateTime = (isoString) => {
+    if (!isoString) return '—'
+    const date = new Date(isoString)
+    date.setHours(date.getHours() + 7)
+    return date.toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' })
+}
+
 function VoiceHistory() {
     const [entries, setEntries] = useState([])
     const [loading, setLoading] = useState(true)
@@ -93,7 +100,7 @@ function VoiceHistory() {
                                     )}
                                 </td>
                                     <td>{entry.device_name_vn ?? entry.device_name ?? '—'}</td>
-                                    <td>{new Date(entry.created_at).toLocaleString('vi-VN')}</td>
+                                    <td>{formatDateTime(entry.created_at)}</td>
                                 </tr>
                             ))}
                         </tbody>
