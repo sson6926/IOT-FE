@@ -88,25 +88,23 @@ function History() {
                     <table className="history-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>STT</th>
                                 <th>Thiết bị</th>
                                 <th>Hành động</th>
-                                <th>Giá trị</th>
                                 <th>Kích hoạt bởi</th>
                                 <th>Thời gian</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {historyData.map((entry) => (
+                            {historyData.map((entry, index) => (
                                 <tr key={entry.id}>
-                                    <td>#{entry.id}</td>
-                                    <td>#{entry.device_id}</td>
+                                    <td>#{index+1}</td>
+                                    <td>{entry.device_name_vn}</td>
                                     <td>
                                         <span className={`chip chip--${entry.action_type}`}>
                                             {entry.action_type === 'on' ? 'Bật' : 'Tắt'}
                                         </span>
                                     </td>
-                                    <td>{entry.action_value ?? '—'}</td>
                                     <td>
                                         <span className={`pill pill--${entry.triggered_by}`}>
                                             {entry.triggered_by}
