@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'http://172.30.34.82:8000'
 let authToken = null
 
 const apiClient = axios.create({

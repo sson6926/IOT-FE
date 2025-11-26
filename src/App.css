@@ -97,6 +97,202 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+.realtime {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.realtime__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.realtime-card {
+  border-radius: 24px;
+  padding: 1.5rem;
+  color: #fff;
+  box-shadow: 0 24px 45px rgba(15, 23, 42, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.realtime-card__label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.realtime-card__value {
+  font-size: 2.75rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.realtime-card__value span {
+  font-size: 1.15rem;
+  margin-left: 0.35rem;
+  opacity: 0.85;
+}
+
+.realtime-card__delta {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.realtime-card__delta strong {
+  font-weight: 700;
+}
+
+.realtime-card__delta--up {
+  color: #fefce8;
+}
+
+.realtime-card__delta--down {
+  color: #fee2e2;
+}
+
+.realtime-card__delta--flat {
+  color: #e2e8f0;
+}
+
+.realtime-card__timestamp {
+  margin: 0;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.realtime-card__progress {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+
+.realtime-card__progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #fff;
+  transition: width 0.6s ease;
+}
+
+.realtime__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.sensor-chart {
+  background: #fff;
+  border-radius: 24px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 320px;
+}
+
+.sensor-chart header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sensor-chart--wide {
+  grid-column: span 2;
+}
+
+.sensor-chart svg {
+  width: 100%;
+  height: 220px;
+}
+
+.sensor-log {
+  background: #fff;
+  border-radius: 24px;
+  padding: 1.25rem;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  grid-column: span 2;
+}
+
+.sensor-log__list {
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+}
+
+.sensor-log__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sensor-log__list::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 999px;
+}
+
+.sensor-log__list::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
+
+.sensor-log ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sensor-log li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.sensor-log__time {
+  margin: 0;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.sensor-log__sub {
+  margin: 0.15rem 0 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.sensor-log__values {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.chip--temperature {
+  background: rgba(251, 113, 133, 0.2);
+  color: #be123c;
+}
+
+.chip--humidity {
+  background: rgba(56, 189, 248, 0.2);
+  color: #0f766e;
+}
+
 .alert {
   padding: 1rem 1.25rem;
   border-radius: 18px;
