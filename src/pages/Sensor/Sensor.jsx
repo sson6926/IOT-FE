@@ -1,36 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import DeviceCard from '../../components/DeviceCard'
-import MetricChart from '../../components/MetricChart'
 import { api } from '../../services/apiClient'
-
-
-const metricList = [
-    {
-        id: 'temperature',
-        title: 'Nhiệt độ',
-        unit: '°C',
-        value: 27.4,
-        values: [26.5, 27.1, 26.8, 27.9, 27.4, 28.1, 27.4],
-        accent: '#fb7185',
-    },
-    {
-        id: 'humidity',
-        title: 'Độ ẩm',
-        unit: '%',
-        value: 61,
-        values: [58, 59, 60, 62, 63, 62, 61],
-        accent: '#38bdf8',
-    },
-]
-
-const normalizeDevices = (payload) => {
-    if (Array.isArray(payload)) return payload
-    if (Array.isArray(payload?.data)) return payload.data
-    if (Array.isArray(payload?.devices)) return payload.devices
-    return []
-}
 
 const normalizeSensorData = (payload) => {
     if (Array.isArray(payload)) return payload
@@ -56,11 +27,7 @@ const buildDelta = (current, previous, precision = 1) => {
     return diff
 }
 
-function Dashboard() {
-    const [devices, setDevices] = useState([])
-    const [pending, setPending] = useState({})
-    const [loadingDevices, setLoadingDevices] = useState(true)
-    const [deviceError, setDeviceError] = useState('')
+function Sensor() {
     const [sensorData, setSensorData] = useState([])
     const [sensorError, setSensorError] = useState('')
     const [sensorLoading, setSensorLoading] = useState(true)
@@ -69,41 +36,9 @@ function Dashboard() {
         let isMounted = true
         let timerId
 
-        const fetchDevices = async () => {
-            try {
-                const payload = await api.get('/device/')
-                if (!isMounted) return
-                const nextDevices = normalizeDevices(payload)
-                setDevices(nextDevices)
-                setDeviceError(nextDevices.length ? '' : 'Không có thiết bị nào để hiển thị.')
-            } catch (error) {
-                if (!isMounted) return
-                console.error('Failed to get devices', error)
-                setDeviceError('Không tải được danh sách thiết bị. Vui lòng thử lại.')
-            } finally {
-                if (isMounted) {
-                    setLoadingDevices(false)
-                    timerId = setTimeout(fetchDevices, 5000)
-                }
-            }
-        }
-
-        fetchDevices()
-        return () => {
-            isMounted = false
-            if (timerId) {
-                clearTimeout(timerId)
-            }
-        }
-    }, [])
-
-    useEffect(() => {
-        let isMounted = true
-        let timerId
-
         const fetchSensorData = async () => {
             try {
-                const payload = await api.get('/sensordata/latest/20')
+                const payload = await api.get('/sensordata/latest/100')
                 if (!isMounted) return
                 const normalized = normalizeSensorData(payload)
                 const sorted = normalized
@@ -112,7 +47,7 @@ function Dashboard() {
                         (a, b) =>
                             new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
                     )
-                setSensorData(sorted.slice(-20))
+                setSensorData(sorted.slice(-100))
                 setSensorError('')
             } catch (error) {
                 if (!isMounted) return
@@ -263,79 +198,32 @@ function Dashboard() {
         [humiditySeries]
     )
 
-    const toggleDevice = async (id) => {
-        const snapshot = devices.map((device) => ({ ...device }))
-        const currentDevice = devices.find((device) => device.id === id)
-
-        if (!currentDevice) {
-            return
-        }
-
-        const nextStatus = currentDevice.status === 'on' ? 'off' : 'on'
-
-        setPending((prev) => ({ ...prev, [id]: true }))
-        setDevices((prev) =>
-            prev.map((device) => (device.id === id ? { ...device, status: nextStatus } : device))
-        )
-
-        try {
-            await api.post(`/device/${id}/${nextStatus}/dashboard`)
-        } catch (error) {
-            console.error('Failed to toggle device', error)
-            setDevices(snapshot)
-        } finally {
-            setPending((prev) => ({ ...prev, [id]: false }))
-        }
-    }
-
     return (
-        <main className="dashboard">
+        <main className="dashboard sensor-page">
             <header className="dashboard__header">
                 <div>
-                    <h1>Bảng điều khiển IoT</h1>
+                    <h1>Dữ liệu cảm biến</h1>
                     <p className="dashboard__subtitle">
-                        Bật/tắt quạt và đèn theo thời gian thực ngay tại đây.
+                        Nhiệt độ & độ ẩm từ cảm biến, cập nhật tự động mỗi 5 giây.
                     </p>
                 </div>
             </header>
 
-            {deviceError && <div className="alert alert--error">{deviceError}</div>}
-            {loadingDevices && <p className="dashboard__subtitle">Đang tải thiết bị...</p>}
-
-            <section className="dashboard__grid">
-                {devices.length > 0 ? (
-                    devices.map(({ id, name, status }) => (
-                        <DeviceCard
-                            key={id}
-                            label={name}
-                            isOn={status === 'on'}
-                            onToggle={() => toggleDevice(id)}
-                            loading={!!pending[id]}
-                        />
-                    ))
-                ) : (
-                    !loadingDevices && (
-                        <p className="dashboard__subtitle">Chưa có thiết bị nào trong hệ thống.</p>
-                    )
-                )}
-            </section>
-
+            {sensorError && <div className="alert alert--error">{sensorError}</div>}
+            {sensorLoading && (
+                <p className="dashboard__subtitle">Đang tải dữ liệu cảm biến...</p>
+            )}
 
             <section className="realtime">
                 <header className="metrics__header">
                     <div>
-                        <h2>Sensor data</h2>
+                        <h2>Giá trị hiện tại</h2>
                         <p className="dashboard__subtitle">
-                            Tự động cập nhật mỗi 5 giây. Lần cập nhật cuối:{' '}
+                            Lần cập nhật cuối:{' '}
                             <strong>{formatDateTime(latestSensor?.created_at)}</strong>
                         </p>
                     </div>
                 </header>
-
-                {sensorError && <div className="alert alert--error">{sensorError}</div>}
-                {sensorLoading && (
-                    <p className="dashboard__subtitle">Đang tải dữ liệu cảm biến...</p>
-                )}
 
                 <div className="realtime__cards">
                     {[
@@ -351,11 +239,12 @@ function Dashboard() {
                             label: 'Độ ẩm',
                             value: latestSensor?.humidity,
                             unit: '%',
-                            gradient: 'linear-gradient(135deg, #38bdf8, #6366f1)',
+                            gradient: 'linear-gradient(135deg, #51a687, #06402b)',
                         },
                     ].map(({ id, label, value, unit, gradient }) => {
                         const delta = deltas[id]
-                        const deltaDirection = delta == null ? 'flat' : delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat'
+                        const deltaDirection =
+                            delta == null ? 'flat' : delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat'
                         return (
                             <article
                                 key={id}
@@ -370,10 +259,16 @@ function Dashboard() {
                                 <p className={`realtime-card__delta realtime-card__delta--${deltaDirection}`}>
                                     {delta == null ? 'Không đổi' : (
                                         <>
-                                            {deltaDirection === 'up' ? '▲' : deltaDirection === 'down' ? '▼' : '▬'}{' '}
+                                            {deltaDirection === 'up'
+                                                ? '▲'
+                                                : deltaDirection === 'down'
+                                                    ? '▼'
+                                                    : '▬'}{' '}
                                             <strong>{`${delta > 0 ? '+' : ''}${delta}${unit}`}</strong>
                                             {deltas.timestamp
-                                                ? ` so với ${new Date(deltas.timestamp).toLocaleTimeString('vi-VN')}`
+                                                ? ` so với ${new Date(
+                                                    deltas.timestamp
+                                                ).toLocaleTimeString('vi-VN')}`
                                                 : ''}
                                         </>
                                     )}
@@ -385,9 +280,10 @@ function Dashboard() {
                                     <div
                                         className="realtime-card__progress-fill"
                                         style={{
-                                            width: id === 'temperature'
-                                                ? `${Math.min((value ?? 0) / 40 * 100, 100)}%`
-                                                : `${Math.min((value ?? 0), 100)}%`,
+                                            width:
+                                                id === 'temperature'
+                                                    ? `${Math.min((value ?? 0) / 40 * 100, 100)}%`
+                                                    : `${Math.min((value ?? 0), 100)}%`,
                                         }}
                                     />
                                 </div>
@@ -409,7 +305,10 @@ function Dashboard() {
                                     <span>°C</span>
                                 </p>
                             </header>
-                            <HighchartsReact highcharts={Highcharts} options={temperatureChartOptions} />
+                            <HighchartsReact
+                                highcharts={Highcharts}
+                                options={temperatureChartOptions}
+                            />
                         </article>
 
                         <article className="sensor-chart sensor-chart--wide">
@@ -423,7 +322,10 @@ function Dashboard() {
                                     <span>%</span>
                                 </p>
                             </header>
-                            <HighchartsReact highcharts={Highcharts} options={humidityChartOptions} />
+                            <HighchartsReact
+                                highcharts={Highcharts}
+                                options={humidityChartOptions}
+                            />
                         </article>
 
                         <div className="sensor-log">
@@ -464,4 +366,6 @@ function Dashboard() {
     )
 }
 
-export default Dashboard;
+export default Sensor
+
+

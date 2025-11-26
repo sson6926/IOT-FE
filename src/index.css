@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
 :root {
-  font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --color-primary: #06402b;
+  --color-primary-soft: #51a687;
+  --color-primary-soft-bg: #e3fff5;
+
+  font-family: "Google Sans Flex", sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #0f172a;
-  background-color: #f4f7ff;
+  background-color: #f9f9f9;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

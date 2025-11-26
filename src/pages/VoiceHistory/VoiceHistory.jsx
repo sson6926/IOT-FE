@@ -49,7 +49,6 @@ function VoiceHistory() {
         <main className="history">
             <header className="history__header">
                 <div>
-                    <p className="dashboard__eyebrow">Lịch sử giọng nói</p>
                     <h1>Voice Commands</h1>
                     <p className="dashboard__subtitle">
                         Các câu lệnh và hành động đã được hệ thống xử lý.

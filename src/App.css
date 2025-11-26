@@ -37,7 +37,7 @@
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
   font-weight: 600;
-  color: #4338ca;
+  color: var(--color-primary);
   transition: all 0.2s ease;
   text-decoration: none;
   cursor: pointer;
@@ -46,8 +46,12 @@
 
 .top-nav__button--active {
   background: #fff;
-  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.15);
-  color: #0f172a;
+  box-shadow: 0 10px 20px rgba(6, 64, 43, 0.18);
+  color: var(--color-primary);
+}
+
+.top-nav__button:visited {
+  color: var(--color-primary);
 }
 
 .dashboard {
@@ -59,19 +63,20 @@
   gap: 2rem;
 }
 
+.sensor-page {
+  padding-top: 1.25rem;
+  gap: 1.25rem;
+}
+
+.sensor-page .realtime {
+  margin-top: 0.5rem;
+}
+
 .dashboard__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-}
-
-.dashboard__eyebrow {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: #6366f1;
-  margin: 0 0 0.5rem;
 }
 
 .dashboard__subtitle {
@@ -114,7 +119,7 @@
   border-radius: 24px;
   padding: 1.5rem;
   color: #fff;
-  box-shadow: 0 24px 45px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 24px 45px rgba(6, 64, 43, 0.35);
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -197,7 +202,7 @@
   background: #fff;
   border-radius: 24px;
   padding: 1.5rem;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 20px 40px rgba(6, 64, 43, 0.18);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -223,7 +228,7 @@
   background: #fff;
   border-radius: 24px;
   padding: 1.25rem;
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 20px 40px rgba(6, 64, 43, 0.18);
   grid-column: span 2;
 }
 
@@ -284,13 +289,13 @@
 }
 
 .chip--temperature {
-  background: rgba(251, 113, 133, 0.2);
-  color: #be123c;
+  background: rgba(81, 166, 135, 0.18);
+  color: var(--color-primary);
 }
 
 .chip--humidity {
-  background: rgba(56, 189, 248, 0.2);
-  color: #0f766e;
+  background: rgba(81, 166, 135, 0.12);
+  color: var(--color-primary-soft);
 }
 
 .alert {
@@ -377,8 +382,8 @@
 }
 
 .chip--on {
-  color: #14532d;
-  background: rgba(34, 197, 94, 0.18);
+  color: var(--color-primary);
+  background: rgba(81, 166, 135, 0.15);
 }
 
 .chip--off {
@@ -451,7 +456,7 @@
   height: 34px;
   border-radius: 999px;
   border: none;
-  background: #e2e8f0;
+  background: #e5e7eb; /* OFF state: neutral gray */
   padding: 4px;
   display: flex;
   align-items: center;
@@ -469,7 +474,7 @@
 }
 
 .toggle--on {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-primary));
 }
 
 .toggle--on .toggle__thumb {
@@ -628,8 +633,8 @@
 }
 
 .pagination__page--active {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  border-color: #6366f1;
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-primary));
+  border-color: var(--color-primary);
   color: #fff;
 }
 

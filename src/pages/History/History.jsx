@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react'
 import React from 'react'
 import { api } from '../../services/apiClient'
 
-const formatDateTime = (isoString) =>
-    new Date(isoString).toLocaleString('vi-VN', {
+const formatDateTime = (isoString) => {
+    if (!isoString) return '--'
+    const date = new Date(isoString)
+    date.setHours(date.getHours() + 7)
+    return date.toLocaleString('vi-VN', {
         dateStyle: 'short',
         timeStyle: 'short',
     })
+}
 
 function History() {
     const [historyData, setHistoryData] = useState([])
@@ -62,13 +66,11 @@ function History() {
         <main className="history">
             <header className="history__header">
                 <div>
-                    <p className="dashboard__eyebrow">Nhật ký thiết bị</p>
                     <h1>Lịch sử hành động</h1>
                     <p className="dashboard__subtitle">
                         Ghi lại mọi sự kiện bật/tắt cùng nguồn kích hoạt.
                     </p>
                 </div>
-                <button className="history__export">Xuất CSV</button>
             </header>
 
             {error && (
