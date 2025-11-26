@@ -14,7 +14,7 @@ function App() {
   return (
     <div className="app-shell">
       <nav className="top-nav">
-        <span className="top-nav__brand">iLoveIoT</span>
+        <span className="top-nav__brand">Nha thong minh</span>
         <div className="top-nav__tabs">
           {tabs.map(({ id, path, label }) => (
             <Link
